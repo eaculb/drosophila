@@ -4,78 +4,45 @@ import '../App.css';
 import { traitDictionary } from '../traitDictionary'
 import Selector from './Selector'
 
-const traitNamesByCategory = (categoryName) => {
+// const traitNamesByCategory = (categoryName) => {
+//   let returnList = new Array(0);
+//   for (var trait of traitDictionary) {
+//     if (trait.details.category === categoryName) {
+//       returnList.push(trait.name);
+//     }
+//   }
+//   return returnList;
+// };
+
+const traitObjectsByCategory = (categoryName) => {
   let returnList = new Array(0);
-  returnList.push("wild type");
-  Object.entries(traitDictionary).forEach(
-    ([name, details]) => {
-      if (details.category === categoryName) {
-        returnList.push(name);
-      }
+  for (var trait of traitDictionary) {
+    if (trait.details.category === categoryName) {
+      returnList.push(trait);
     }
-  );
+  }
   return returnList;
 };
 
-const traitCategories = {
-  "eyes": traitNamesByCategory("eyes"),
-  "body": traitNamesByCategory("body"),
-  "wings": traitNamesByCategory("wings"),
-  "bristles": traitNamesByCategory("bristles"),
-  "antennae": traitNamesByCategory("antennae"),
-  "misc": traitNamesByCategory("misc")
+const traitDictByCategory = {
+  "eyes": traitObjectsByCategory("eyes"),
+  "body": traitObjectsByCategory("body"),
+  "wings": traitObjectsByCategory("wings"),
+  "bristles": traitObjectsByCategory("bristles"),
+  "antennae": traitObjectsByCategory("antennae"),
+  "misc": traitObjectsByCategory("misc")
 }
-
-// function chromosomesFromMutations(mutationValues) {
-//   Object.entries(mutationValues).forEach(
-//     ([_, value]) => console.log(value)
-//   );
-// }
 
 export default function App() {
 
-  const [mutationValuesMale, setMutationValuesMale] = useState({
-    eyes: 'wild type',
-    body: 'wild type',
-    wings: 'wild type',
-    antennae: 'wild type',
-    bristles: 'wild type',
-    misc: 'wild type',
-  })
-
-  const [mutationValuesFemale, setMutationValuesFemale] = useState({
-    eyes: 'wild type',
-    body: 'wild type',
-    wings: 'wild type',
-    antennae: 'wild type',
-    bristles: 'wild type',
-    misc: 'wild type',
-  })
-
-  const setMutationValue = (values, setter) => {
-    return (category, value) => {
-      setter({
-        ...values,
-        category: value,
-      })
-    }
-  }
+  const [mutationValuesMale, setMutationValuesMale] = useState({})
+  const [mutationValuesFemale, setMutationValuesFemale] = useState({})
 
   return (
     <>
       <div className="selector-container">
-        <Selector
-          dict={traitCategories}
-          title="Male"
-          mutationValues={mutationValuesMale}
-          setMutationValue={setMutationValue(mutationValuesMale, setMutationValuesMale)}
-        />
-        <Selector
-          dict={traitCategories}
-          title="Female"
-          mutationValues={mutationValuesFemale}
-          setMutationValue={setMutationValue(mutationValuesFemale, setMutationValuesFemale)}
-        />
+        <Selector dict={traitDictByCategory} title="Male" values={mutationValuesMale} setter={setMutationValuesMale}/>
+        <Selector dict={traitDictByCategory} title="Female" values={mutationValuesFemale} setter={setMutationValuesFemale}/>
       </div>
     </>
   );

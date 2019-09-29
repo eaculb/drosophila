@@ -1,29 +1,38 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap'
 
+function MutationFormGroup({ title, traitList, setter }) {
+  return (
+    <Form.Group controlId="formGridState">
+      <Form.Label>{title}</Form.Label>
+      <Form.Control 
+        as="select" 
+        variant="primary"
+        onChange={setter}
+      >
+        <option>wild type</option>
+        {traitList.map(trait => <option key={trait.name}>{trait.name}</option>)}
+      </Form.Control>
+    </Form.Group>
+  )
+}
 
-export default function MutationForm({ dict, title, setMutationValue, onSubmit }) {
+export default function MutationForm({ dict, title, values, setter, onSubmit }) {
 
-  function MutationFormGroup({ title, category, handleChange }) {
-    
-    return (
-      <Form.Group controlId="formGridState">
-        <Form.Label>{title}</Form.Label>
-        <Form.Control as="select" variant="primary" onChange={(e) => handleChange(title.toLowerCase(), e.target.value)}>
-          {category.map(trait => <option key={trait}>{trait}</option>)}
-        </Form.Control>
-      </Form.Group>
-    )
+  function categorySetter(key){
+    return (e) => {
+      setter({...values, [key]: e.target.value})
+    }
   }
 
   return (
     <Form>
-      <MutationFormGroup title="Eyes" category={dict.eyes} handleChange={setMutationValue} />
-      <MutationFormGroup title="Body" category={dict.body} handleChange={setMutationValue} />
-      <MutationFormGroup title="Wings" category={dict.wings} handleChange={setMutationValue} />
-      <MutationFormGroup title="Bristles" category={dict.bristles} handleChange={setMutationValue} />
-      <MutationFormGroup title="Antennae" category={dict.antennae} handleChange={setMutationValue} />
-      <MutationFormGroup title="Misc" category={dict.misc} handleChange={setMutationValue} />
+      <MutationFormGroup title="Eyes" traitList={dict.eyes} setter={categorySetter('eyes')}/>
+      <MutationFormGroup title="Body" traitList={dict.body} setter={categorySetter('body')}/>
+      <MutationFormGroup title="Wings" traitList={dict.wings} setter={categorySetter('wings')}/>
+      <MutationFormGroup title="Bristles" traitList={dict.bristles} setter={categorySetter('bristles')}/>
+      <MutationFormGroup title="Antennae" traitList={dict.antennae} setter={categorySetter('antennae')}/>
+      <MutationFormGroup title="Misc" traitList={dict.misc} setter={categorySetter('misc')}/>
       <Button variant="primary" onClick={onSubmit}>
         Submit
       </Button>
