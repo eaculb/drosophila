@@ -19,7 +19,7 @@ export default function Selector({ dict, title, setter, values }) {
           }}
         />
       ) : (
-          <p>hi</p>
+          <p>yayayay</p>
         )}
     </div>
   )
