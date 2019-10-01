@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MutationForm from './MutationForm'
 
-export default function Selector({ dict, title, setter, values }) {
-  const [submitted, setSubmitted] = useState(false);
+export default function Selector({ title, selectedMutations, submitted, setSubmitted, ...props }) {
+  if (!selectedMutations) {
+    selectedMutations = [];
+  }
 
   return (
-    <div className="mutation-form m-2 p-2 border rounded">
+    <div className="mutation-form m-1 p-2 border rounded">
       <h4>{title}</h4>
       {!submitted ? (
         <MutationForm
-          dict={dict}
-          title={title}
-          values={values}
-          setter={setter}
           onSubmit={() => {
             setSubmitted(true);
-            console.log(values);
           }}
+          {...props}
         />
       ) : (
-          <p>yayayay</p>
+          <>{selectedMutations.map(mutation => <p key={mutation.name}>{mutation.name}</p>)}</>
         )}
     </div>
   )

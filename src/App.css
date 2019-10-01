@@ -5,5 +5,46 @@
 }
 
 .mutation-form{
-	width: 250px;
+  width: 250px;
+  height: 610px;
+}
+
+.app {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.firstButton {
+  width: 100%;
+}
+
+.results {
+  flex-grow: 1;
+}
+
+.generation-label {
+  width: 250px;
+}
+
+.select-and-table {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
+
+table {
+  margin: 1rem;
+  table-layout: fixed;
+  width: 350px;
+}
+
+th,
+td {
+  padding: 10px;
 }

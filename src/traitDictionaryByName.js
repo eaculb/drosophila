@@ -1,4 +1,3 @@
-
 export const traitDictionary = {
   "white eyes":
     { chromosome: 1, position: 1.5, category: "eyes", name: "white eyes", symbol: "w", lethal: false, dominant: false },
