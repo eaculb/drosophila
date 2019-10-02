@@ -5,7 +5,7 @@ import PhenotypeTable from './PhenotypeTable'
 
 export default function PhenotypeRow({ index, phenotypes, options }) {
   const [trait1, setTrait1] = useState("female");
-  const [trait2, setTrait2] = useState(options[0]);
+  const [trait2, setTrait2] = useState(options[0] || null);
 
   function TraitFormGroup({ title, setter, defaultOption }) {
     return (
@@ -32,11 +32,11 @@ export default function PhenotypeRow({ index, phenotypes, options }) {
 
   return (
     <div className="p-2">
-      <h5 className="generation-label">Generation {index}</h5>
+      <h5 className="generation-label">{`F${index+1} Generation`}</h5>
       <div className="select-and-table">
         <Form>
           <TraitFormGroup title="Trait 1" setter={setTrait1} defaultOption={trait1} />
-          <TraitFormGroup title="Trait 2" setter={setTrait2} defaultOption={trait2} />
+          {!!options.length && (<TraitFormGroup title="Trait 2" setter={setTrait2} defaultOption={trait2} />)}
         </Form>
         <PhenotypeTable trait1={trait1} trait2={trait2} phenotypes={phenotypes} />
       </div>

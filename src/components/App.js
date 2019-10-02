@@ -10,6 +10,9 @@ import PhenotypeRow from './PhenotypeRow'
 
 import { Button } from 'react-bootstrap'
 
+const GENERATION_SIZE = 1000;
+const NUM_F_GENERATIONS = 2;
+
 const traitNamesByCategory = (categoryName) => {
   let returnList = new Array(0);
   for (var trait in traitDictionary) {
@@ -51,12 +54,12 @@ function phenotypeFromGenotype(genotype, uniqueMutationNames) {
         if (mutation.lethal && mutA && mutB) {
           return { alive: false }
         }
-        if (mutation.dominant || (mutA && mutB)) {
+        if (mutation.dominant || (mutA && mutB) || (mutA && !chromosome.b)) {
           phenotype[mutationName] = true;
         } else {
           phenotype[mutationName] = false;
         }
-      } else if ((traitDictionary[mutationName].chromosome === chromosomeNumber) || (traitDictionary[mutationName].chromosome === 4 && chromosomeNumber === 'X')) {
+      } else if (traitDictionary[mutationName].chromosome === chromosomeNumber) {
         phenotype[mutationName] = false;
       }
     }
@@ -112,7 +115,7 @@ function makeFirstCross(maleMutations, femaleMutations, uniqueMutationNames) {
   var genotypes = [];
   var phenotypes = [];
 
-  for (var i = 0; i < 1000; i++) {
+  for (var i = 0; i < GENERATION_SIZE; i++) {
     let childGenotype = makeChildGenotype(maleGenotype, femaleGenotype)
     genotypes.push(childGenotype);
     phenotypes.push(phenotypeFromGenotype(childGenotype, uniqueMutationNames));
@@ -122,13 +125,13 @@ function makeFirstCross(maleMutations, femaleMutations, uniqueMutationNames) {
 
 
 function makeCross(parentGenotypes, uniqueMutationNames) {
-  const maleGenotypes = parentGenotypes.filter(genotype => !genotype.X.b);
-  const femaleGenotypes = parentGenotypes.filter(genotype => genotype.X.b);
+  const maleGenotypes = parentGenotypes.filter(genotype => !genotype.X.b && phenotypeFromGenotype(genotype, uniqueMutationNames).alive);
+  const femaleGenotypes = parentGenotypes.filter(genotype => genotype.X.b && phenotypeFromGenotype(genotype, uniqueMutationNames).alive);
 
   var genotypes = [];
   var phenotypes = [];
 
-  for (var i = 0; i < 1000; i++) {
+  for (var i = 0; i < GENERATION_SIZE; i++) {
     let maleGenotype = maleGenotypes[random(maleGenotypes.length-1)];
     let femaleGenotype = femaleGenotypes[random(femaleGenotypes.length-1)];
     let childGenotype = makeChildGenotype(maleGenotype, femaleGenotype);
@@ -204,18 +207,18 @@ export default function App() {
             onClick={makeFirstGeneration}
             disabled={!(femaleSubmitted && maleSubmitted)}
           >
-            Make First Generation
+            Make F1 Generation
         </Button>
         )}
-        {(allPhenotypes.length > 0 && allPhenotypes.length < 3) && (
+        {(allPhenotypes.length > 0 && allPhenotypes.length < NUM_F_GENERATIONS) && (
             <Button
               className="firstButton"
               onClick={makeGeneration}
             >
-              Make Generation
+              {`Make F${allPhenotypes.length+1} Generation`}
             </Button>
           )}
-        {(allPhenotypes.length >= 3) && (
+        {(allPhenotypes.length >= NUM_F_GENERATIONS) && (
             <Button
               className="firstButton"
               variant='danger'

@@ -17,7 +17,10 @@ export default function Selector({ title, selectedMutations, submitted, setSubmi
           {...props}
         />
       ) : (
-          <>{selectedMutations.map(mutation => <p key={mutation.name}>{mutation.name}</p>)}</>
+          <>
+          {!selectedMutations.length && <p className="wild-type">wild type</p>}
+          {selectedMutations.map(mutation => <p key={mutation.name}>{mutation.name}</p>)}
+          </>
         )}
     </div>
   )

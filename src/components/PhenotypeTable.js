@@ -4,7 +4,7 @@ export default function PhenotypeTable({ trait1, trait2, phenotypes }) {
   function countPhenotypes(trait1, wantTrait1, trait2, wantTrait2) {
     let count = 0;
     for (var phenotype of phenotypes) {
-      if (phenotype.alive && phenotype[trait1] === wantTrait1 && phenotype[trait2] === wantTrait2) {
+      if (phenotype.alive && phenotype[trait1] === wantTrait1 && (!trait2 || (trait2 && phenotype[trait2] === wantTrait2))) {
         count++;
       }
     }
@@ -26,11 +26,11 @@ export default function PhenotypeTable({ trait1, trait2, phenotypes }) {
           <td>{countPhenotypes(trait1, false, trait2, false)}</td>
           <td>{countPhenotypes(trait1, true, trait2, false)}</td>
         </tr>
-        <tr>
+        {trait2 && (<tr>
           <th scope="row">{trait2 === 'female' ? 'female' : trait2}</th>
           <td>{countPhenotypes(trait1, false, trait2, true)}</td>
           <td>{countPhenotypes(trait1, true, trait2, true)}</td>
-        </tr>
+        </tr>)}
       </tbody>
     </table>
   )

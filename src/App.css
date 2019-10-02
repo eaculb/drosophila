@@ -20,6 +20,10 @@
   justify-content: center;
 }
 
+.wild-type {
+  color: darkred;
+}
+
 .firstButton {
   width: 100%;
 }
