@@ -36,7 +36,9 @@ function getSelectedMutations(mutationValues) {
   let returnList = [];
   for (var category in mutationValues) {
     var traitName = mutationValues[category];
-    returnList.push(traitDictionary[traitName]);
+    if (traitName !== "wild type"){
+      returnList.push(traitDictionary[traitName]);
+    }
   }
   return returnList;
 }
@@ -77,13 +79,13 @@ function makeOrder0Genotype(mutations, male) {
   for (var mutation of mutations) {
     let chromosomeToPush;
     const chromosomeVal = mutation.chromosome;
-    if (chromosomeVal === 4) {
+    if (chromosomeVal === 'X') {
       chromosomeToPush = chromosomes.X;
     } else {
       chromosomeToPush = chromosomes[chromosomeVal];
     }
     chromosomeToPush.a[mutation.name] = mutation;
-    if (!mutation.lethal && !(male && chromosomeVal === 4)) {
+    if (!mutation.lethal && !(male && chromosomeVal === 'X')) {
       chromosomeToPush.b[mutation.name] = mutation;
     }
   }
@@ -154,7 +156,7 @@ export default function App() {
   const maleMutations = getSelectedMutations(mutationValuesMale);
   const femaleMutations = getSelectedMutations(mutationValuesFemale);
 
-  const uniqueMutationNames = union(femaleMutations.map(mutation=>mutation.name), maleMutations.map(mutation=>mutation.name));
+  const uniqueMutationNames = union(femaleMutations.map(mutation=>mutation && mutation.name), maleMutations.map(mutation=>mutation && mutation.name));
 
   const reset = () => {
     setMutationValuesMale({});
