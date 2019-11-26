@@ -6,7 +6,6 @@
 
 .mutation-form{
   width: 250px;
-  height: 610px;
 }
 
 .app {
@@ -17,7 +16,8 @@
 .left {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .wild-type {
@@ -51,4 +51,14 @@ table {
 th,
 td {
   padding: 10px;
+}
+
+.text-button {
+  border: none;
+  background-color: white;
+  color: black;
+}
+
+.bold {
+  font-weight: bold;
 }

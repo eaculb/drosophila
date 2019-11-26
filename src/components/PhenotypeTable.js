@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default function PhenotypeTable({ trait1, trait2, phenotypes }) {
-  function countPhenotypes(trait1, wantTrait1, trait2, wantTrait2) {
+export default function PhenotypeTable({ trait, phenotypes, F1Male, F1Female, setF1Male, setF1Female }) {
+  function countPhenotypes(wantTrait, wantFemale) {
     let count = 0;
     for (var phenotype of phenotypes) {
-      if (phenotype.alive && phenotype[trait1] === wantTrait1 && (!trait2 || (trait2 && phenotype[trait2] === wantTrait2))) {
+      const alive = phenotype.alive;
+      const matchesSex = ((wantFemale && phenotype['female']) || (!wantFemale && !phenotype['female']))
+      const matchesTrait = (trait === null) || (phenotype[trait] === wantTrait)
+      if (alive && matchesSex && matchesTrait) {
         count++;
       }
     }
     return count;
+  }
+
+  const getClassName = (boldStatus) => {
+    if (boldStatus) {
+      return "text-button bold";
+    } else {
+      return "text-button"
+    }
   }
 
   return (
@@ -16,20 +27,36 @@ export default function PhenotypeTable({ trait1, trait2, phenotypes }) {
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">{trait1 === 'female' ? 'male' : 'wild type'}</th>
-          <th scope="col">{trait1 === 'female' ? 'female' : trait1}</th>
+          <th scope="col">{'male'}</th>
+          <th scope="col">{'female'}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th scope="row">{trait2 === 'female' ? 'male' : 'wild type'}</th>
-          <td>{countPhenotypes(trait1, false, trait2, false)}</td>
-          <td>{countPhenotypes(trait1, true, trait2, false)}</td>
+          <th scope="row">{'wild type'}</th>
+          <td>
+            <button className={getClassName((F1Male === 'wild type'))} onClick={setF1Male('wild type')}>
+              {countPhenotypes(false, false)}
+            </button>
+          </td>
+          <td>
+          <button className={getClassName((F1Female === 'wild type'))} onClick={setF1Female('wild type')}>
+              {countPhenotypes(false, true)}
+            </button>
+          </td>
         </tr>
-        {trait2 && (<tr>
-          <th scope="row">{trait2 === 'female' ? 'female' : trait2}</th>
-          <td>{countPhenotypes(trait1, false, trait2, true)}</td>
-          <td>{countPhenotypes(trait1, true, trait2, true)}</td>
+        {trait && (<tr>
+          <th scope="row">{trait}</th>
+          <td>
+          <button className={getClassName((F1Male === trait))} onClick={setF1Male(trait)}>
+              {countPhenotypes(true, false)}
+            </button>
+          </td>
+          <td>
+          <button className={getClassName((F1Female === trait))} onClick={setF1Female(trait)}>
+              {countPhenotypes(true, true)}
+            </button>
+          </td>
         </tr>)}
       </tbody>
     </table>

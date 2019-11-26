@@ -153,6 +153,9 @@ export default function App() {
   const [maleSubmitted, setMaleSubmitted] = useState(false);
   const [femaleSubmitted, setFemaleSubmitted] = useState(false);
 
+  const [F1Male, setF1Male] = useState('wild type');
+  const [F1Female, setF1Female] = useState('wild type');
+
   const maleMutations = getSelectedMutations(mutationValuesMale);
   const femaleMutations = getSelectedMutations(mutationValuesFemale);
 
@@ -203,15 +206,15 @@ export default function App() {
             setSubmitted={setFemaleSubmitted}
           />
         </div>
-        {(allPhenotypes.length === 0) && (
+        {(allPhenotypes.length === 0) && 
+          (femaleSubmitted && maleSubmitted) && (
           <Button
             className="firstButton"
             onClick={makeFirstGeneration}
-            disabled={!(femaleSubmitted && maleSubmitted)}
           >
             Make F1 Generation
-        </Button>
-        )}
+        </Button>)
+        }
         {(allPhenotypes.length > 0 && allPhenotypes.length < NUM_F_GENERATIONS) && (
             <Button
               className="firstButton"
@@ -237,6 +240,10 @@ export default function App() {
             index={index}
             phenotypes={phenotypes}
             options={uniqueMutationNames}
+            F1Male={F1Male}
+            F1Female={F1Female}
+            setF1Male={setF1Male}
+            setF1Female={setF1Female}
           />
         )}
       </div>

@@ -6,12 +6,13 @@ function MutationFormGroup({ title, traitList, setter }) {
     <Form.Group>
       <Form.Label>{title}</Form.Label>
       <Form.Control
+        size="sm"
         as="select"
         variant="primary"
         onChange={setter}
       >
         <option>wild type</option>
-        {traitList.map(trait => <option key={trait}>{trait}</option>)}
+        {traitList.map(trait => <option key={trait} >{trait}</option>)}
       </Form.Control>
     </Form.Group>
   )
@@ -33,7 +34,7 @@ export default function MutationForm({ dict, title, values, setter, onSubmit }) 
       <MutationFormGroup title="Bristles" traitList={dict.bristles} setter={categorySetter('bristles')} />
       <MutationFormGroup title="Antennae" traitList={dict.antennae} setter={categorySetter('antennae')} />
       <MutationFormGroup title="Misc" traitList={dict.misc} setter={categorySetter('misc')} />
-      <Button variant="primary" onClick={onSubmit}>
+      <Button size="sm" variant="primary" onClick={onSubmit}>
         Submit
       </Button>
     </Form>
