@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap'
 
-import PhenotypeTable from './PhenotypeTable'
-
-export default function PhenotypeRow({ index, options, ...props }) {
+export default function PhenotypeRow({ index, options, Component, ...props }) {
   const [trait, setTrait] = useState(options[0] || null);
 
   function TraitFormGroup({ title }) {
@@ -29,7 +27,7 @@ export default function PhenotypeRow({ index, options, ...props }) {
         {(options.length > 0) && (<Form>
           <TraitFormGroup title="Trait" />
         </Form>)}
-        <PhenotypeTable trait={trait} {...props} />
+        <Component trait={trait} {...props} />
       </div>
     </div>
   )
