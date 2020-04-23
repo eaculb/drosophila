@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap'
+import traitDictByCategory from '../utils/traitDictByCategory';
 
-function MutationFormGroup({ title, traitList, setter }) {
+function MutationFormGroup({ category, mutationList, setMutationList }) {
+  const title = category.charAt(0).toUpperCase() + category.slice(1);
+  const traitList = traitDictByCategory[category];
+  const [categoryValue, setCategoryValue] = useState('wild type')
+
   return (
     <Form.Group>
       <Form.Label>{title}</Form.Label>
@@ -9,7 +14,19 @@ function MutationFormGroup({ title, traitList, setter }) {
         size="sm"
         as="select"
         variant="primary"
-        onChange={setter}
+        onChange={e => {
+          let val = e.target.value;
+          setCategoryValue(val)
+          if (val !== 'wild type') {
+            setMutationList({ ...mutationList, [category]: val })
+          } else {
+            // FIXME: wtf
+            let tempList = JSON.parse(JSON.stringify(mutationList))
+            delete tempList[category]
+            setMutationList({ ...tempList })
+          }
+        }}
+        value={categoryValue}
       >
         <option>wild type</option>
         {traitList.map(trait => <option key={trait} >{trait}</option>)}
@@ -18,25 +35,35 @@ function MutationFormGroup({ title, traitList, setter }) {
   )
 }
 
-export default function MutationForm({ dict, title, values, setter, onSubmit }) {
-
-  function categorySetter(key) {
-    return (e) => {
-      setter({ ...values, [key]: e.target.value })
-    }
-  }
-
+export default function MutationForm({ onSubmit, mutationList, setMutationList, submitted, setSubmitted }) {
   return (
-    <Form>
-      <MutationFormGroup title="Eyes" traitList={dict.eyes} setter={categorySetter('eyes')} />
-      <MutationFormGroup title="Body" traitList={dict.body} setter={categorySetter('body')} />
-      <MutationFormGroup title="Wings" traitList={dict.wings} setter={categorySetter('wings')} />
-      <MutationFormGroup title="Bristles" traitList={dict.bristles} setter={categorySetter('bristles')} />
-      <MutationFormGroup title="Antennae" traitList={dict.antennae} setter={categorySetter('antennae')} />
-      <MutationFormGroup title="Misc" traitList={dict.misc} setter={categorySetter('misc')} />
-      <Button size="sm" variant="primary" onClick={onSubmit}>
-        Submit
+    <Form onSubmit={(e) => {
+      setSubmitted(true);
+      e.preventDefault();
+    }}>
+      {!submitted ? (
+        <>
+          <MutationFormGroup category="eyes" mutationList={mutationList} setMutationList={setMutationList} />
+          <MutationFormGroup category="body" mutationList={mutationList} setMutationList={setMutationList} />
+          <MutationFormGroup category="wings" mutationList={mutationList} setMutationList={setMutationList} />
+          <MutationFormGroup category="bristles" mutationList={mutationList} setMutationList={setMutationList} />
+          <MutationFormGroup category="antennae" mutationList={mutationList} setMutationList={setMutationList} />
+          <MutationFormGroup category="misc" mutationList={mutationList} setMutationList={setMutationList} />
+          <Button type="submit" size="sm" variant="primary">
+            Submit
       </Button>
+        </>
+      ) : (
+          <>
+            {((Object.keys(mutationList)).length === 0) && <p className="wild-type">wild type</p>}
+            <p>{mutationList.eyes} </p>
+            <p>{mutationList.body}</p>
+            <p>{mutationList.wings}</p>
+            <p>{mutationList.bristles}</p>
+            <p>{mutationList.antennae}</p>
+            <p>{mutationList.misc}</p>
+          </>
+        )}
     </Form>
   )
 }

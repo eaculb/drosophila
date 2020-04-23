@@ -1,27 +1,11 @@
 import React from 'react';
 import MutationForm from './MutationForm'
 
-export default function Selector({ title, selectedMutations, submitted, setSubmitted, ...props }) {
-  if (!selectedMutations) {
-    selectedMutations = [];
-  }
-
+export default function Selector({ title, ...props }) {
   return (
     <div className="mutation-form m-1 p-2 border rounded">
       <h4>{title}</h4>
-      {!submitted ? (
-        <MutationForm
-          onSubmit={() => {
-            setSubmitted(true);
-          }}
-          {...props}
-        />
-      ) : (
-          <>
-          {!selectedMutations.length && <p className="wild-type">wild type</p>}
-          {selectedMutations.map(mutation => <p key={mutation.name}>{mutation.name}</p>)}
-          </>
-        )}
+      <MutationForm {...props}/>
     </div>
   )
 }

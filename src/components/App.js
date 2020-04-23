@@ -1,12 +1,11 @@
 import '../index.css';
 import '../App.css';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { union, random } from 'lodash';
 
 import phenotypeFromGenotype from '../utils/phenotypeFromGenotype';
 import makeChildGenotype from '../utils/makeChildGenotype';
-import traitDictByCategory from '../utils/traitDictByCategory';
 import { traitDictionary } from '../traitDictionaryByName'
 
 
@@ -23,16 +22,12 @@ import makeP1Genotype from '../utils/makeP1Genotype';
 const GENERATION_SIZE = 1000;
 const NUM_F_GENERATIONS = 2;
 
-
-function getSelectedMutations(mutationValues) {
-  let returnList = [];
-  for (var category in mutationValues) {
-    var traitName = mutationValues[category];
-    if (traitName !== "wild type") {
-      returnList.push(traitDictionary[traitName]);
-    }
+function getMutationList(selectedMutationsByCategory) {
+  let result = []
+  for (var mutation of Object.values(selectedMutationsByCategory)) {
+    result.push(traitDictionary[mutation])
   }
-  return returnList;
+  return result;
 }
 
 function makeF1Generation(maleMutations, femaleMutations) {
@@ -51,10 +46,30 @@ function makeF1Generation(maleMutations, femaleMutations) {
 }
 
 
-function makeCross(parentGenotypes, uniqueMutationNames) {
+function makeCross(parentGenotypes, F1Female, F1Male) {
   let livingParents = parentGenotypes.filter(g => isAlive(g));
-  const maleGenotypes = livingParents.filter(genotype => isMale(genotype));
-  const femaleGenotypes = livingParents.filter(genotype => !isMale(genotype));
+  const maleGenotypes = livingParents.filter(genotype => {
+    if (!isMale(genotype)) {
+      return false
+    };
+    let phenotype = phenotypeFromGenotype(genotype);
+    if (F1Male === 'wild type') {
+      return (Object.keys(phenotype) === 'alive', 'female')
+    } else {
+      return (!!phenotype[F1Male])
+    }
+  });
+  const femaleGenotypes = livingParents.filter(genotype => {
+    if (isMale(genotype)) {
+      return false
+    };
+    let phenotype = phenotypeFromGenotype(genotype);
+    if (F1Female === 'wild type') {
+      return (Object.keys(phenotype) === 'alive', 'female')
+    } else {
+      return (!!phenotype[F1Female])
+    } 
+  });
 
   var genotypes = [];
   var phenotypes = [];
@@ -64,7 +79,7 @@ function makeCross(parentGenotypes, uniqueMutationNames) {
     let femaleGenotype = femaleGenotypes[random(femaleGenotypes.length - 1)];
     let childGenotype = makeChildGenotype(femaleGenotype, maleGenotype);
     genotypes.push(childGenotype);
-    phenotypes.push(phenotypeFromGenotype(childGenotype, uniqueMutationNames));
+    phenotypes.push(phenotypeFromGenotype(childGenotype));
   }
   return { genotypes, phenotypes }
 }
@@ -82,10 +97,11 @@ export default function App() {
   const [F1Male, setF1Male] = useState('wild type');
   const [F1Female, setF1Female] = useState('wild type');
 
-  const maleMutations = getSelectedMutations(mutationValuesMale);
-  const femaleMutations = getSelectedMutations(mutationValuesFemale);
+  const [traitOptions, setTraitOptions] = useState([]);
 
-  const uniqueMutationNames = union(femaleMutations.map(mutation => mutation && mutation.name), maleMutations.map(mutation => mutation && mutation.name));
+  useEffect(() => {
+    setTraitOptions(union(Object.values(mutationValuesMale), Object.values(mutationValuesFemale)));
+  }, [mutationValuesMale, mutationValuesFemale]);
 
   const reset = () => {
     setMutationValuesMale({});
@@ -96,18 +112,19 @@ export default function App() {
     setFemaleSubmitted(false);
   }
 
-  const makeFirstGeneration = () => {
-    const { genotypes, phenotypes } = makeF1Generation(maleMutations, femaleMutations, uniqueMutationNames);
+  const makeFirstGeneration = (mutationValuesMale, mutationValuesFemale) => {
+    const maleMutations = getMutationList(mutationValuesMale)
+    const femaleMutations = getMutationList(mutationValuesFemale)
+    const { genotypes, phenotypes } = makeF1Generation(maleMutations, femaleMutations);
     setAllGenotypes([...allGenotypes, genotypes]);
     setAllPhenotypes([...allPhenotypes, phenotypes]);
   }
 
   const makeGeneration = () => {
     let currentGenotypes = allGenotypes[allGenotypes.length - 1];
-    const { genotypes, phenotypes } = makeCross(currentGenotypes, uniqueMutationNames);
+    const { genotypes, phenotypes } = makeCross(currentGenotypes, F1Female, F1Male);
     setAllGenotypes([...allGenotypes, genotypes]);
     setAllPhenotypes([...allPhenotypes, phenotypes]);
-    debugger;
   }
 
   return (
@@ -115,20 +132,16 @@ export default function App() {
       <div className="left p-1 border-right">
         <div className="selector-container">
           <Selector
-            dict={traitDictByCategory}
             title="Male"
-            values={mutationValuesMale}
-            setter={setMutationValuesMale}
-            selectedMutations={maleMutations}
+            mutationList={mutationValuesMale}
+            setMutationList={setMutationValuesMale}
             submitted={maleSubmitted}
             setSubmitted={setMaleSubmitted}
           />
           <Selector
-            dict={traitDictByCategory}
             title="Female"
-            values={mutationValuesFemale}
-            setter={setMutationValuesFemale}
-            selectedMutations={femaleMutations}
+            mutationList={mutationValuesFemale}
+            setMutationList={setMutationValuesFemale}
             submitted={femaleSubmitted}
             setSubmitted={setFemaleSubmitted}
           />
@@ -137,7 +150,7 @@ export default function App() {
           (femaleSubmitted && maleSubmitted) && (
             <Button
               className="firstButton"
-              onClick={makeFirstGeneration}
+              onClick={() => makeFirstGeneration(mutationValuesMale, mutationValuesFemale)}
             >
               Make F1 Generation
             </Button>)
@@ -161,20 +174,26 @@ export default function App() {
         )}
       </div>
       <div className="results">
-        {(allPhenotypes.length >= 1) && <PhenotypeRow
-          Component={F1Table}
-          phenotypes={allPhenotypes[0]}
-          options={uniqueMutationNames}
-          F1Male={F1Male}
-          F1Female={F1Female}
-          setF1Male={setF1Male}
-          setF1Female={setF1Female}
-        />}
-        {(allPhenotypes.length >= 2) && <PhenotypeRow
-          Component={F2Table}
-          phenotypes={allPhenotypes[1]}
-          options={uniqueMutationNames}
-        />}
+        {(allPhenotypes.length >= 1) && (
+          <PhenotypeRow
+            Component={F1Table}
+            index={0}
+            phenotypes={allPhenotypes[0]}
+            options={traitOptions}
+            F1Male={F1Male}
+            F1Female={F1Female}
+            setF1Male={setF1Male}
+            setF1Female={setF1Female}
+          />
+        )}
+        {(allPhenotypes.length >= 2) && (
+          <PhenotypeRow
+            Component={F2Table}
+            index={1}
+            phenotypes={allPhenotypes[1]}
+            options={traitOptions}
+          />
+        )}
       </div>
     </div>
   );

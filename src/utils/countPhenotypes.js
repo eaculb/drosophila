@@ -3,7 +3,7 @@ export default function countPhenotypes(trait, phenotypes, wantTrait, wantFemale
   for (var phenotype of phenotypes) {
     const alive = phenotype.alive;
     const matchesSex = ((wantFemale && phenotype['female']) || (!wantFemale && !phenotype['female']))
-    const matchesTrait = (trait === null) || (phenotype[trait] === wantTrait)
+    const matchesTrait = (trait === null) || (!!phenotype[trait] === wantTrait)
     if (alive && matchesSex && matchesTrait) {
       count++;
     }

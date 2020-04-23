@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 
 export default function PhenotypeRow({ index, options, Component, ...props }) {
   const [trait, setTrait] = useState(options[0] || null);
-
+  
   function TraitFormGroup({ title }) {
     return (
       <Form.Group>
@@ -24,9 +24,9 @@ export default function PhenotypeRow({ index, options, Component, ...props }) {
     <div className="p-2">
       <h5 className="generation-label">{`F${index+1} Generation`}</h5>
       <div className="select-and-table">
-        {(options.length > 0) && (<Form>
+        {/* {(options.length > 0) && (<Form>
           <TraitFormGroup title="Trait" />
-        </Form>)}
+        </Form>)} */}
         <Component trait={trait} {...props} />
       </div>
     </div>
