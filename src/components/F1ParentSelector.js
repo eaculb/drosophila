@@ -36,7 +36,8 @@ export default function F1ParentSelector({ disabled, phenotypes, traitOptions, F
               as="select"
               variant="primary"
               onChange={e => {
-                setF1ParentsMale(e.target.value);
+                let val = e.target.value;
+                setF1ParentsMale(val === '' ? [] : val.split(','));
                 e.preventDefault();
               }}
               value={F1ParentsMale}
@@ -54,7 +55,8 @@ export default function F1ParentSelector({ disabled, phenotypes, traitOptions, F
               as="select"
               variant="primary"
               onChange={e => {
-                setF1ParentsFemale(e.target.value)
+                let val = e.target.value;
+                setF1ParentsFemale(val === '' ? [] : val.split(','))
                 e.preventDefault();
               }}
               value={F1ParentsFemale}

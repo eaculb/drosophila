@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import countPhenotypes from '../utils/countPhenotypes';
 import getStringifiedList from '../utils/getStringifiedList';
 
