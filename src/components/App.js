@@ -76,8 +76,6 @@ export default function App() {
   // complicated w/ allowing the next generation's parents to be filtered
   const makeF2Generation = (F1Genotypes) => {
     const livingParents = F1Genotypes.filter(g => isAlive(g));
-    const deleteMe = livingParents.map(g => ({ male: isMale(g), pkeys: Object.keys(phenotypeFromGenotype(g)).map(key => ({[key]: phenotypeFromGenotype(g)[key]})) }));
-    console.log(deleteMe)
     const maleGenotypes = livingParents.filter(genotype => {
       if (!isMale(genotype)) {
         return false
