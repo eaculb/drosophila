@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 
 import F1ParentSelector from "./F1ParentSelector";
+import StepTitle from "./StepTitle";
 
 export default function Step2Control({
   allGenotypes,
@@ -15,7 +16,8 @@ export default function Step2Control({
   reset,
 }) {
   return (
-    <>
+    <div className="step">
+      <StepTitle step="2" title="Select F1 Parent Phenotypes" />
       <F1ParentSelector
         disabled={allPhenotypes.length > 1}
         phenotypes={allPhenotypes[0]}
@@ -27,16 +29,20 @@ export default function Step2Control({
       />
       {allPhenotypes.length === 1 ? (
         <Button
-          className="firstButton"
+          className="mutation-form-submit"
           onClick={() => makeF2Generation(allGenotypes[0])}
         >
           Make F2 Generation
         </Button>
       ) : (
-        <Button className="firstButton" variant="danger" onClick={reset}>
+        <Button
+          className="mutation-form-submit"
+          variant="danger"
+          onClick={reset}
+        >
           Reset
         </Button>
       )}
-    </>
+    </div>
   );
 }

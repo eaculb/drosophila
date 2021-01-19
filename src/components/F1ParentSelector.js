@@ -5,8 +5,6 @@ import countPhenotypes from "../utils/countPhenotypes";
 import getStringifiedList from "../utils/getStringifiedList";
 import permutations from "../utils/permutations";
 
-import StepTitle from "./StepTitle";
-
 export default function F1ParentSelector({
   disabled,
   phenotypes,
@@ -34,7 +32,6 @@ export default function F1ParentSelector({
 
   return (
     <Form className="p-2 w-100">
-      <StepTitle step="2" title="Select F1 Parent Phenotypes" />
       <Form.Row>
         <Col>
           <Form.Group>

@@ -17,19 +17,37 @@ p {
   margin-bottom: 0.2rem;
 }
 
-table {
-  margin: 1rem;
-  table-layout: fixed;
-  width: 550px;
+
+$container-padding: 1rem;
+
+.app-container {
+  padding: 0 $container-padding;
 }
 
-th,
-td {
-  padding: 10px;
+.titlebar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-top: $container-padding;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 3px solid darkslategray;
+  background-color: white;
+  margin-bottom: 2rem;
 }
 
-.w {
-  width: 250px;
+$transition-time: 400ms;
+$selector-padding: 0.5rem;
+$parent-column-width: 250px;
+
+.step {
+  margin-bottom: 2rem;
+}
+
+.selector-parent {
+  margin-bottom: 2rem;
 }
 
 .selector-container {
@@ -38,45 +56,41 @@ td {
 }
 
 .mutation-form {
-  width: 250px;
+  flex: 1 1;
+  & > input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  &:first-child{
+    margin-right: $selector-padding;
+  }
 }
 
-$container-padding: 1rem;
-
-.app-container {
-  padding: 0 $container-padding;
-  background-color: white;
-}
-
-.titlebar {
-  position: sticky;
-  top: 0;
-  padding-top: $container-padding;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 3px solid darkslategray;
-  background-color: white;
-}
-
-.wild-type {
-  color: darkred;
-}
-
-.firstButton {
+.mutation-form-submit {
   width: 100%;
 }
 
-.generation-label {
-  width: 250px;
+.wild-type-label {
+  color: darkred;
 }
 
-.select-and-table {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-end;
+.generation-results {
+  padding: 0 $container-padding;
+  margin-bottom: 2rem;
 }
 
-.bold {
-  font-weight: bold;
+table {
+  table-layout: fixed;
+  text-align: right;
+}
+
+.w {
+  width: 350px;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 10px;
 }

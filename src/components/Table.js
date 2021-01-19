@@ -13,14 +13,14 @@ export default function Table({ options, phenotypes }) {
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">{'male'}</th>
-          <th scope="col">{'female'}</th>
+          <th scope="col">Male</th>
+          <th scope="col">Female</th>
         </tr>
       </thead>
       <tbody>
         {options.map((permutation, index) => (
           <tr key={index}>
-            <th scope="row">{getStringifiedList(permutation)}</th>
+            <th scope="row" className="w">{getStringifiedList(permutation)}</th>
             <td>{countPhenotypes(permutation, phenotypes)}</td>
             <td>{countPhenotypes(['female', ...permutation], phenotypes)}</td>
           </tr>

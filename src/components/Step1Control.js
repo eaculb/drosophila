@@ -13,13 +13,12 @@ export default function Step1Control({
   setMutationValuesFemale,
   makeF1Generation,
 }) {
-  const className = active ? "step-1" : "step-1 completed";
   return (
-    <div className={className}>
+    <div className="step">
       <StepTitle step="1" title="Select P0 Phenotypes" />
-      {active ? (
-        <>
-          <div className="selector-container">
+      <div className="selector-container">
+        {active ? (
+          <>
             <Selector
               title="Male"
               mutationList={mutationValuesMale}
@@ -30,21 +29,23 @@ export default function Step1Control({
               mutationList={mutationValuesFemale}
               setMutationList={setMutationValuesFemale}
             />
-          </div>
-          <Button
-            className="firstButton"
-            onClick={() =>
-              makeF1Generation(mutationValuesMale, mutationValuesFemale)
-            }
-          >
-            Make F1 Generation
-          </Button>
-        </>
-      ) : (
-        <div className="selector-container">
-          <SelectedList title="Male" mutations={mutationValuesMale} />
-          <SelectedList title="Female" mutations={mutationValuesFemale} />
-        </div>
+          </>
+        ) : (
+          <>
+            <SelectedList title="Male" mutations={mutationValuesMale} />
+            <SelectedList title="Female" mutations={mutationValuesFemale} />
+          </>
+        )}
+      </div>
+      {active && (
+        <Button
+          className="mutation-form-submit"
+          onClick={() =>
+            makeF1Generation(mutationValuesMale, mutationValuesFemale)
+          }
+        >
+          Make F1 Generation
+        </Button>
       )}
     </div>
   );

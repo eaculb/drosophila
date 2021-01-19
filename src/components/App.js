@@ -126,7 +126,7 @@ export default function App() {
     <div className="app-container">
       <Titlebar />
       <Row className="app">
-        <Col xs="auto">
+        <Col s={6} md={4}>
           <Step1Control
             active={allPhenotypes.length === 0}
             mutationValuesMale={mutationValuesMale}
@@ -149,7 +149,7 @@ export default function App() {
             />
           )}
         </Col>
-        <Col xs="auto">
+        <Col s={6} md={4}>
           {allPhenotypes.length >= 1 && (
             <PhenotypeRow
               title="F1 Generation"
@@ -157,6 +157,8 @@ export default function App() {
               traitOptions={traitOptions}
             />
           )}
+        </Col>
+        <Col s={6} md={4}>
           {allPhenotypes.length >= 2 && (
             <PhenotypeRow
               title="F2 Generation"
