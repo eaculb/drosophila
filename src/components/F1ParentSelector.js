@@ -31,7 +31,7 @@ export default function F1ParentSelector({
   }, []);
 
   return (
-    <Form className="p-2 w-100">
+    <Form className="p0-form">
       <Form.Row>
         <Col>
           <Form.Group>

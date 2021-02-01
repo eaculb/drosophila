@@ -17,7 +17,6 @@ p {
   margin-bottom: 0.2rem;
 }
 
-
 $container-padding: 1rem;
 
 .app-container {
@@ -38,12 +37,17 @@ $container-padding: 1rem;
   margin-bottom: 2rem;
 }
 
-$transition-time: 400ms;
 $selector-padding: 0.5rem;
-$parent-column-width: 250px;
 
 .step {
   margin-bottom: 2rem;
+  padding: 0 $container-padding;
+  max-width: 480px;
+}
+
+.p0-form {
+  width: 100;
+  padding: 10px 0;
 }
 
 .selector-parent {
@@ -62,7 +66,7 @@ $parent-column-width: 250px;
     box-sizing: border-box;
   }
 
-  &:first-child{
+  &:first-child {
     margin-right: $selector-padding;
   }
 }
