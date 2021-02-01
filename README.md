@@ -1,8 +1,6 @@
 # Drosophila Lab: An interactive genetics lab
 
-**The most up-to-date build is live on a preview channel at https://drosophila-lab--beta-sqc2yf6o.web.app/**
-
-I'll be deploying this build to the permanent url shortly, but the live app is currently in use in a classroom and I don't want to break it!
+The live app lives at https://drosophila-lab.eaculb.co/
 
 ## The story
 
